@@ -1,0 +1,17 @@
+# Données et modèles (trop volumineux / non redistribuables)
+data/raw/
+models/
+*.csv
+*.zip
+*.joblib
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Divers
+.DS_Store
+.env
