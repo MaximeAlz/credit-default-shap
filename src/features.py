@@ -17,7 +17,9 @@ def add_domain_features(df: pd.DataFrame) -> pd.DataFrame:
     df["GOODS_CREDIT_RATIO"] = df["AMT_GOODS_PRICE"] / credit   # apport
     df["AGE_YEARS"] = -df["DAYS_BIRTH"] / 365.25
     df["EMPLOYED_AGE_RATIO"] = df["DAYS_EMPLOYED"] / df["DAYS_BIRTH"]
-    return df
+    # DAYS_BIRTH est remplacée par AGE_YEARS : garder les deux répartirait
+    # l'effet de l'âge sur deux variables et brouillerait les explications SHAP.
+    return df.drop(columns=["DAYS_BIRTH"])
 
 
 def split_xy(df: pd.DataFrame):

@@ -31,12 +31,28 @@ Ce projet prolonge mon projet de fin d'études à CY Tech, consacré à la compa
 
 ## Résultats
 
-*À compléter après l'entraînement sur le jeu complet.*
+Jeu de test de 61 500 clients (20 % des données, tirage stratifié), entraînement sur la seule table `application_train` :
 
-| Modèle | AUC | Gini | KS |
-|---|---|---|---|
-| Régression logistique | – | – | – |
-| LightGBM | – | – | – |
+| Modèle | AUC | Gini | KS | Brier |
+|---|---|---|---|---|
+| Régression logistique | 0,751 | 0,501 | 0,376 | 0,202* |
+| **LightGBM** | **0,770** | **0,540** | **0,404** | **0,067** |
+
+\* La régression logistique est entraînée avec `class_weight="balanced"`, qui gonfle ses probabilités : son score de Brier n'est donc pas comparable. La calibration est prévue dans la feuille de route.
+
+### Explicabilité globale
+
+![SHAP beeswarm](reports/figures/shap_beeswarm.png)
+
+- Les trois scores externes `EXT_SOURCE_1`, `EXT_SOURCE_2` et `EXT_SOURCE_3` (des notations venant de bureaux de crédit) dominent largement : plus ils sont bas, plus le risque monte.
+- Parmi les variables construites, `CREDIT_TERM` (mensualité / montant du crédit, l'inverse de la durée) et `GOODS_CREDIT_RATIO` (part financée par le bien, liée à l'apport) arrivent juste derrière.
+- `CODE_GENDER` figure parmi les variables influentes. En crédit, utiliser le sexe pour décider est interdit (principe de non-discrimination). Ce point sera traité dans une étape dédiée à l'équité du modèle.
+
+### Explicabilité locale : le client le plus risqué de l'échantillon
+
+![SHAP waterfall](reports/figures/shap_waterfall_client.png)
+
+Le graphique décompose le score d'un client, en log-odds, à partir du risque moyen. Chaque barre montre de combien une variable augmente (en rouge) ou diminue (en bleu) son risque. Les trois plus grosses contributions positives donnent les raisons à communiquer en cas de refus.
 
 ## Structure
 
@@ -74,6 +90,7 @@ Pour itérer plus vite sur un sous-échantillon : `python -m src.train --sample 
 - [ ] Calibration des probabilités
 - [ ] Seuil de décision fixé selon le coût d'un défaut face à un refus à tort
 - [ ] Comparaison SHAP / LIME et stabilité des explications
+- [ ] Équité : retrait des variables sensibles et mesure de l'écart de taux d'acceptation
 - [ ] Application Streamlit déployée
 
 ## Auteur
