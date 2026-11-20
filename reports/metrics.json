@@ -1,15 +1,15 @@
 {
   "logistic_regression": {
-    "auc": 0.7505,
-    "gini": 0.5009,
-    "ks": 0.3763,
-    "brier": 0.2022
+    "auc": 0.7603,
+    "gini": 0.5206,
+    "ks": 0.3942,
+    "brier": 0.1991
   },
   "lightgbm": {
-    "auc": 0.7699,
-    "gini": 0.5397,
-    "ks": 0.4035,
-    "brier": 0.0669,
-    "best_iteration": 605
+    "auc": 0.7784,
+    "gini": 0.5569,
+    "ks": 0.414,
+    "brier": 0.0663,
+    "best_iteration": 876
   }
 }

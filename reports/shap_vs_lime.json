@@ -1,0 +1,13 @@
+{
+  "n_clients": 100,
+  "top_k": 5,
+  "accord_top5_moyen": 0.384,
+  "accord_signe_variables_communes": 1.0,
+  "spearman_moyen_toutes_variables": 0.28,
+  "stabilite_top5_lime": 0.596,
+  "stabilite_top5_shap": 1.0,
+  "temps_par_explication_s": {
+    "shap": 0.0081,
+    "lime": 0.347
+  }
+}

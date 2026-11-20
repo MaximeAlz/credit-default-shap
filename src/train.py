@@ -3,6 +3,7 @@
 Usage :
     python -m src.train
     python -m src.train --data chemin/vers/application_train.csv --sample 50000
+    python -m src.train --no-history   # sans les tables d'historique
 """
 import argparse
 import json
@@ -21,6 +22,7 @@ from src.config import APPLICATION_FILE, MODELS_DIR, RANDOM_STATE, REPORTS_DIR, 
 from src.data import load_application
 from src.evaluate import credit_metrics
 from src.features import add_domain_features, split_xy
+from src.history import add_history
 
 
 def build_logistic(X: pd.DataFrame) -> Pipeline:
@@ -55,8 +57,10 @@ def build_lightgbm() -> lgb.LGBMClassifier:
     )
 
 
-def main(data_path=APPLICATION_FILE, sample=None):
+def main(data_path=APPLICATION_FILE, sample=None, history=True):
     df = add_domain_features(load_application(data_path))
+    if history:
+        df = add_history(df)
     if sample:
         df = df.sample(n=min(sample, len(df)), random_state=RANDOM_STATE)
     X, y = split_xy(df)
@@ -103,5 +107,7 @@ if __name__ == "__main__":
     parser.add_argument("--data", default=APPLICATION_FILE)
     parser.add_argument("--sample", type=int, default=None,
                         help="Sous-échantillon pour itérer vite (ex. 50000)")
+    parser.add_argument("--no-history", action="store_true",
+                        help="N'utiliser que application_train (sans bureau / previous_application)")
     args = parser.parse_args()
-    main(args.data, args.sample)
+    main(args.data, args.sample, history=not args.no_history)
